@@ -38,7 +38,7 @@ export default function SubscriptionDetailPage() {
     <div className="flex flex-col min-h-full">
       <Navigation />
 
-      <main className="flex-1 max-w-[900px] w-full mx-auto px-8 py-10">
+      <main id="main-content" className="flex-1 max-w-[900px] w-full mx-auto px-4 md:px-8 py-6 md:py-10">
         {/* Back Link */}
         <Link href="/" className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] mb-6 no-underline">
           ← Back to Dashboard
@@ -71,8 +71,10 @@ export default function SubscriptionDetailPage() {
               Renews every 1st of the month
             </div>
             <div className="flex gap-2 mt-3 justify-end">
-              <Button variant="ghost" size="sm">Open in Adobe</Button>
-              <Button variant="outline-danger" size="sm" onClick={() => setTracked(!tracked)}>
+              <Button variant="ghost" size="sm" aria-label="Open Adobe account">
+                Open in Adobe
+              </Button>
+              <Button variant="outline-danger" size="sm" onClick={() => setTracked(!tracked)} aria-label={tracked ? "Cancel tracking this subscription" : "Resume tracking this subscription"}>
                 {tracked ? "Cancel Track" : "Resume Tracking"}
               </Button>
             </div>
@@ -158,7 +160,7 @@ export default function SubscriptionDetailPage() {
             ))}
           </div>
           <div className="flex justify-between items-center mt-3 pt-3 border-t border-[var(--border)]">
-            <button className="text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
+            <button aria-label="Show all billing history transactions" className="text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
               Show All
             </button>
             <span className="text-[12px] text-[var(--text-muted)]">Showing 4 of 26</span>

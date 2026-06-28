@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Badge } from "./Badge";
 
 interface Subscription {
@@ -20,10 +21,18 @@ interface SubscriptionRowProps {
 }
 
 export function SubscriptionRow({ subscription, onClick }: SubscriptionRowProps) {
+  const statusLabel =
+    subscription.variant === "active"
+      ? "Active"
+      : subscription.variant === "soon"
+      ? "Unused?"
+      : "Irregular";
+
   return (
-    <div
-      onClick={onClick}
-      className="flex items-center py-4 px-6 border-b border-[var(--border)] last:border-0 hover:bg-[var(--surface-2)] cursor-pointer transition-colors"
+    <Link
+      href={`/subscriptions/${subscription.id}`}
+      aria-label={`${subscription.name} — ${subscription.amount.toFixed(2).replace(".", ",")} € per ${subscription.period}, ${statusLabel}`}
+      className="flex items-center py-4 px-4 md:px-6 border-b border-[var(--border)] last:border-0 hover:bg-[var(--surface-2)] cursor-pointer transition-colors no-underline"
     >
       {/* Icon */}
       <div
@@ -45,7 +54,7 @@ export function SubscriptionRow({ subscription, onClick }: SubscriptionRowProps)
 
       {/* Badge */}
       <Badge variant={subscription.variant}>
-        {subscription.variant === "active" ? "Active" : subscription.variant === "soon" ? "Unused?" : "Irregular"}
+        {statusLabel}
       </Badge>
 
       {/* Amount */}
@@ -57,6 +66,6 @@ export function SubscriptionRow({ subscription, onClick }: SubscriptionRowProps)
           /{subscription.period}
         </div>
       </div>
-    </div>
+    </Link>
   );
 }

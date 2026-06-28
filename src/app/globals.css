@@ -29,6 +29,131 @@
   --border: #e8e8ea;
 }
 
+/* ===== Skip Link ===== */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 16px;
+  z-index: 9999;
+  padding: 8px 16px;
+  background: var(--accent);
+  color: white;
+  border-radius: 0 0 8px 8px;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: top 0.2s;
+}
+.skip-link:focus {
+  top: 0;
+}
+
+/* ===== Focus Visible Rings (Accessibility) ===== */
+*:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ===== Shimmer Animation ===== */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--surface) 25%,
+    #e8e8ea 50%,
+    var(--surface) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shimmer {
+    animation: none;
+  }
+}
+
+/* ===== Toast Animations ===== */
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateX(100%) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes toast-out {
+  from {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(100%) scale(0.95);
+  }
+}
+
+.toast-enter {
+  animation: toast-in 0.25s ease-out forwards;
+}
+
+.toast-exit {
+  animation: toast-out 0.2s ease-in forwards;
+}
+
+/* ===== Responsive Breakpoints (Mobile First) ===== */
+
+/* Base: 320px+ (mobile) - default styles above */
+
+/* 768px+ (tablet) */
+@media (min-width: 768px) {
+  .dashboard-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .dashboard-main {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* 1024px+ (desktop) */
+@media (min-width: 1024px) {
+  .dashboard-stats {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .dashboard-main {
+    grid-template-columns: 1fr 380px;
+  }
+}
+
+/* 1440px+ (large desktop) */
+@media (min-width: 1440px) {
+  .app-container {
+    max-width: 1320px;
+  }
+}
+
+/* ===== Body ===== */
 body {
   font-family: var(--font-sans);
   color: var(--text-primary);

@@ -1,9 +1,13 @@
 "use client";
 
+import { useState, useEffect } from "react";
+import Link from "next/link";
 import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/Button";
 import { Card, CardBody, CardHeader } from "@/components/Card";
 import { SubscriptionRow } from "@/components/SubscriptionRow";
+import { StatsGridSkeleton } from "@/components/Skeleton";
+import { EmptyState } from "@/components/EmptyState";
 import {
   subscriptions,
   stats,
@@ -57,29 +61,84 @@ function StatCard({
 }
 
 export default function DashboardPage() {
+  const [isLoading, setIsLoading] = useState(true);
+  const [isEmpty, setIsEmpty] = useState(false);
+
+  useEffect(() => {
+    // Simulate loading for skeleton demo
+    const timer = setTimeout(() => setIsLoading(false), 800);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-col min-h-full">
+        <Navigation />
+        <main id="main-content" className="flex-1 max-w-[1200px] w-full mx-auto px-4 md:px-8 py-10">
+          <div className="flex items-end justify-between mb-10">
+            <div>
+              <h1 className="text-2xl md:text-[32px] font-semibold tracking-[-0.64px] leading-tight">
+                Dashboard
+              </h1>
+              <p className="text-sm md:text-base text-[var(--text-secondary)] mt-1.5">
+                Your subscription overview — June 2026
+              </p>
+            </div>
+          </div>
+          <StatsGridSkeleton />
+          <Card>
+            <CardHeader>
+              <span className="text-base font-semibold tracking-[-0.16px]">
+                Active Subscriptions
+              </span>
+            </CardHeader>
+            <div>
+              {Array.from({ length: 5 }).map((_, i) => (
+                <div key={i} className="flex items-center py-4 px-6 border-b border-[var(--border)] last:border-0">
+                  <div className="shimmer w-10 h-10 rounded-lg shrink-0" />
+                  <div className="ml-4 flex-1 min-w-0 space-y-2">
+                    <div className="shimmer h-4 w-32 rounded" />
+                    <div className="shimmer h-3 w-48 rounded" />
+                  </div>
+                  <div className="shimmer h-5 w-16 rounded-full ml-4" />
+                  <div className="ml-4 shrink-0 space-y-1">
+                    <div className="shimmer h-4 w-16 rounded" />
+                    <div className="shimmer h-3 w-8 rounded" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Card>
+        </main>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col min-h-full">
       <Navigation />
 
-      <main className="flex-1 max-w-[1200px] w-full mx-auto px-8 py-10">
+      <main id="main-content" className="flex-1 max-w-[1200px] w-full mx-auto px-4 md:px-8 py-6 md:py-10">
         {/* Header */}
-        <div className="flex items-end justify-between mb-10">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-10 gap-4">
           <div>
-            <h1 className="text-[32px] font-semibold tracking-[-0.64px] leading-tight">
+            <h1 className="text-2xl md:text-[32px] font-semibold tracking-[-0.64px] leading-tight">
               Dashboard
             </h1>
-            <p className="text-base text-[var(--text-secondary)] mt-1.5">
+            <p className="text-sm md:text-base text-[var(--text-secondary)] mt-1.5">
               Your subscription overview — June 2026
             </p>
           </div>
           <div className="flex gap-3">
             <Button variant="secondary">Export CSV</Button>
-            <Button>Scan Now</Button>
+            <Link href="/scan" className="no-underline">
+              <Button>Scan Now</Button>
+            </Link>
           </div>
         </div>
 
         {/* Stats Row */}
-        <div className="grid grid-cols-4 gap-5 mb-10">
+        <div className="dashboard-stats grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
           <StatCard
             label="Monthly Burn"
             value={formatEur(stats.monthlyBurn)}
@@ -104,7 +163,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Main Grid */}
-        <div className="grid grid-cols-[1fr_380px] gap-8">
+        <div className="dashboard-main grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-8">
           {/* Left: Subscription List */}
           <Card>
             <CardHeader>
@@ -115,6 +174,7 @@ export default function DashboardPage() {
                 {["All", "Monthly", "Yearly"].map((f, i) => (
                   <button
                     key={f}
+                    aria-label={`Filter by ${f}`}
                     className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
                       i === 0
                         ? "bg-[var(--text-primary)] text-white"
@@ -126,11 +186,21 @@ export default function DashboardPage() {
                 ))}
               </div>
             </CardHeader>
-            <div>
-              {subscriptions.map((sub) => (
-                <SubscriptionRow key={sub.id} subscription={sub} />
-              ))}
-            </div>
+            {isEmpty ? (
+              <EmptyState
+                icon="📭"
+                title="No subscriptions yet"
+                description="Connect your bank or upload a CSV to start tracking your subscriptions."
+                actionLabel="Scan Now"
+                actionHref="/scan"
+              />
+            ) : (
+              <div>
+                {subscriptions.map((sub) => (
+                  <SubscriptionRow key={sub.id} subscription={sub} />
+                ))}
+              </div>
+            )}
           </Card>
 
           {/* Right: Sidebar */}
