@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SubSnoop — Adobe CC Detail</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #ffffff;
+  --surface: #f4f4f4;
+  --surface-2: #fafafa;
+  --text-primary: #191c1f;
+  --text-secondary: #505a63;
+  --text-muted: #8d969e;
+  --accent: #494fdf;
+  --success: #00a87e;
+  --warning: #ec7e00;
+  --danger: #e23b4a;
+  --border: #e8e8ea;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-pill: 9999px;
+  --nav-height: 64px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: var(--text-primary);
+  background: var(--bg);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+.nav {
+  height: var(--nav-height);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 32px;
+  position: sticky;
+  top: 0;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(12px);
+  z-index: 100;
+}
+
+.nav-logo {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-logo-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.nav-links {
+  display: flex;
+  gap: 32px;
+  margin-left: 48px;
+}
+
+.nav-links a {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.nav-links a:hover, .nav-links a.active {
+  color: var(--text-primary);
+}
+
+.nav-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: var(--radius-pill);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: opacity 0.15s, transform 0.1s;
+  text-decoration: none;
+}
+
+.btn:active { transform: scale(0.97); }
+.btn-primary { background: var(--text-primary); color: #fff; }
+.btn-primary:hover { opacity: 0.85; }
+.btn-danger { background: var(--danger); color: #fff; }
+.btn-danger:hover { opacity: 0.85; }
+.btn-outline { background: transparent; color: var(--text-primary); border: 2px solid var(--text-primary); }
+.btn-outline-danger { background: transparent; color: var(--danger); border: 2px solid var(--danger); }
+.btn-ghost { background: transparent; color: var(--text-secondary); }
+.btn-lg { padding: 14px 32px; font-size: 16px; }
+.btn-sm { padding: 6px 14px; font-size: 13px; }
+
+/* Back link */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-decoration: none;
+  margin-bottom: 24px;
+  transition: color 0.15s;
+}
+
+.back-link:hover { color: var(--text-primary); }
+
+/* Detail Layout */
+.detail-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 32px;
+}
+
+.detail-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.detail-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.detail-title { flex: 1; }
+
+.detail-name {
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.56px;
+  line-height: 1.1;
+}
+
+.detail-plan {
+  font-size: 15px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+.detail-amount {
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: -0.72px;
+  line-height: 1;
+  text-align: right;
+}
+
+.detail-period {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-top: 4px;
+  text-align: right;
+}
+
+/* Quick Actions */
+.quick-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+/* Detail Grid */
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.detail-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+}
+
+.detail-card-title {
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+
+/* Info table */
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.info-row:last-child { border-bottom: none; }
+
+.info-key { font-size: 14px; color: var(--text-secondary); }
+.info-val { font-size: 14px; font-weight: 600; }
+
+/* Timeline */
+.timeline { position: relative; }
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 8px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--border);
+}
+
+.timeline-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 12px 0;
+  position: relative;
+}
+
+.timeline-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 3px solid var(--border);
+  flex-shrink: 0;
+  z-index: 1;
+}
+
+.timeline-dot.charged { background: var(--success); border-color: var(--success); }
+.timeline-dot.pending { background: var(--warning); border-color: var(--warning); }
+
+.timeline-info { flex: 1; }
+.timeline-date { font-size: 14px; font-weight: 500; }
+.timeline-amount { font-size: 16px; font-weight: 700; margin-top: 2px; }
+.timeline-source { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+/* Calendar */
+.calendar-strip {
+  display: flex;
+  gap: 6px;
+  margin-top: 16px;
+}
+
+.cal-month {
+  flex: 1;
+  text-align: center;
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  padding: 4px 0;
+}
+
+.cal-days {
+  display: flex;
+  gap: 2px;
+  margin-top: 4px;
+}
+
+.cal-day {
+  flex: 1;
+  aspect-ratio: 1;
+  border-radius: 3px;
+  background: var(--surface);
+}
+
+.cal-day.charged {
+  background: var(--success);
+}
+
+.cal-day.upcoming {
+  background: var(--warning);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* Insight box */
+.insight {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  background: rgba(238,126,0,0.05);
+  border: 1px solid rgba(238,126,0,0.2);
+  border-radius: var(--radius-md);
+  margin-top: 16px;
+}
+
+.insight-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--warning);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.insight-content { flex: 1; }
+.insight-title { font-size: 14px; font-weight: 600; }
+.insight-text { font-size: 13px; color-secondary); margin-top: 4px; line-height: 1.5; }
+
+/* Danger zone */
+.danger-zone {
+  border: 1px solid rgba(226,59,74,0.2);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  background: rgba(226,59,74,0.02);
+}
+
+.danger-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--danger);
+  margin-bottom: 8px;
+}
+
+.danger-text {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+}
+
+@media (max-width: 640px) {
+  .detail-container { padding: 24px 16px; }
+  .nav-links { display: none; }
+  .detail-grid { grid-template-columns: 1fr; }
+  .detail-header { flex-direction: column; }
+  .detail-amount { text-align: left; margin-top: 12px; }
+  .quick-actions { flex-wrap: wrap; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-logo">
+    <div class="nav-logo-dot"></div>
+    SubSnoop
+  </div>
+  <div class="nav-links">
+    <a href="dashboard.html" class="active">Dashboard</a>
+    <a href="scan.html">Scan</a>
+    <a href="subscriptions.html">Subscriptions</a>
+    <a href="settings.html">Settings</a>
+  </div>
+  <div class="nav-right">
+    <button class="btn btn-ghost btn-sm">Sign Out</button>
+  </div>
+</nav>
+
+<div class="detail-container">
+  <a href="dashboard.html" class="back-link">← Back to Dashboard</a>
+
+  <!-- Header -->
+  <div class="detail-header">
+    <div class="detail-icon" style="background:#FF0000;">A</div>
+    <div class="detail-title">
+      <div class="detail-name">Adobe Creative Cloud</div>
+      <div class="detail-plan">All Apps plan · Monthly billing</div>
+      <div class="quick-actions">
+        <span class="badge-active">Active</span>
+      </div>
+    </div>
+    <div>
+      <div class="detail-amount">€59.99</div>
+      <div class="detail-period">Renews every 1st of the month</div>
+      <div class="quick-actions" style="justify-content:flex-end;">
+        <button class="btn btn-ghost btn-sm">Open in Adobe</button>
+        <button class="btn btn-outline-danger btn-sm" id="toggleBtn" onclick="toggleSubscription()">Cancel Track</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detail Grid -->
+  <div class="detail-grid">
+    <!-- Left: Info -->
+    <div class="detail-card">
+      <div class="detail-card-title">Subscription Info</div>
+      <div class="info-row">
+        <span class="info-key">Plan</span>
+        <span class="info-val">All Apps</span>
+      </div>
+      <div class="info-row">
+        <span class="info-key">Billing Cycle</span>
+        <span class="info-val">Monthly</span>
+      </div>
+      <div class="info-row">
+        <span class="info-key">First Charged</span>
+        <span class="info-val">Apr 8, 2024</span>
+      </div>
+      <div class="info-row">
+        <span class="info-key">Last Charged</span>
+        <span class="info-val">Jun 8, 2026</span>
+      </div>
+      <div class="info-row">
+        <span class="info-key">Next Renewal</span>
+        <span class="info-val" style="color:var(--warning);">Jul 8, 2026 — in 10 days</span>
+      </div>
+      <div class="info-row">
+        <span class="info-key">Total Time Tracking</span>
+        <span class="info-val">2 years, 2 months</span>
+      </div>
+      <div class="info-row">
+        <span class="info-key">Total Spent</span>
+        <span class="info-val">€1,439.76</span>
+      </div>
+    </div>
+
+    <!-- Right: Stats -->
+    <div class="detail-card">
+      <div class="detail-card-title">Cost Analysis <div class="info-row">
+        <span class="info-key">Yearly Cost</span>
+        <span class="info-val">€719.88</span>
+      </div>
+      <div class="info-row">
+        <span class="info-key">Weekly Equivalent</span>
+        <span class="info-val">€13.84</span>
+      </div>
+      <div class="info-row">
+        <span class="info-key">Rank by Cost</span>
+        <span class="info-val">#1 (39% of total)</span>
+      </div>
+      <div class="info-row">
+        <span class="info-key">Cost Trend</span>
+        <span class="info-val" style="color:var(--danger);">↑ 12% (annual increase)</span>
+      </div>
+      <div class="info-row">
+        <span class="info-key">Usage Confidence</span>
+        <span class="info-val">High (50 cycles)</span>
+      </div>
+
+      <!-- Insight -->
+      <div class="insight">
+        <div class="insight-icon">�</div>
+        <div class="insight-content">
+          <div class="insight-title">Save €120/year</div>
+          <div class="insight-text">Switch to annual billing (€54.78/mo) to save 10%. Or consider Photography Plan at €11.99/mo if you only need Photoshop + Lightroom.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Timeline -->
+  <div class="detail-card" style="margin-bottom:24px;">
+    <div class="detail-card-title">Billing History</div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-dot charged"></div>
+        <div class="timeline-info">
+          <div class="timeline-date">Jun 8, 2026</div>
+          <div class="timeline-amount">€59.99</div>
+          <div class="timeline-source">LHV · Transaction #TXN-8842</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot charged"></div>
+        <div class="timeline-info">
+          <div class="timeline-date">May 8, 2026</div>
+          <div class="timeline-amount">€59.99</div>
+          <div class="timeline-source">LHV · Transaction #TXN-8790</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot charged"></div>
+        <div class="timeline-info">
+          <div class="timeline-date">Apr 8, 2026</div>
+          <div class="timeline-amount">€59.99</div>
+          <div class="timeline-source">LHV · Transaction #TXN-8712</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot charged"></div>
+        <div class="timeline-info">
+          <div class="timeline-date">Mar 8, 2026</div>
+          <div class="timeline-amount">€59.99</div>
+          <div class="timeline-source">LHV · Transaction #TXN-8644</div>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:space-between;margin-top:12px;">
+      <button class="btn btn-ghost btn-sm">Show All</button>
+      <span style="font-size:12px;color:var(--text-muted);line-height:1;">Showing 4 of 26</span>
+    </div>
+  </div>
+
+  <!-- Renewal Calendar -->
+  <div class="detail-card" style="margin-bottom:24px;">
+    <div class="detail-card-title">Renewal Calendar</div>
+    <div style="display:flex;gap:16px;">
+      <div style="flex:1;">
+        <div style="font-size:13px;font-weight:600;margin-bottom:8px;">Jun 2026</div>
+        <div class="cal-strip" style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;text-align:center style="font-size:10px;color:var(--text-muted);">E</div>
+          <div style="font-size:10px;color:var(--text-muted);">T</div>
+          <div style="font-size:10px;color:var(--text-muted);">K</div>
+          <div style="font-size:10px;color:var(--text-muted);">N</div>
+          <div style="font-size:10px;color:var(--text-muted);">R</div>
+          <div style="font-size:10px;color:var(--text-muted);">L</div>
+          <div style="font-size:10px;color:var(--text-muted);">P</div>
+          <div style="font-size:12px;padding:4px;">1</div>
+          <div style="font-size:12px;padding:4px;">2</div>
+          <div style="font-size:12px;padding:4px;">3</div>
+          <div style="font-size:12px;padding:4px;">4</div>
+          <div style="font-size:12px;padding:4px;">5</div>
+          <div style="font-size:12px;padding:4px;">6</div>
+          <div style="font-size:12px;padding:4px;">7</div>
+          <div style="font-size:12px;padding:4px;background:var(--success);color:#fff;border-radius:4px;">8</div>
+          <div style="font-size:12px;padding:4px;">9</div>
+          <div style="font-size:12px;padding:4px;">10</div>
+          <div style="font-size:12px;padding:4px;">11</div>
+          <div style="font-size:12px;padding:4px;">12</div>
+          <div style="font-size:12px;padding:4px;">13</div>
+          <div style="font-size:12px;padding:4px;">14</div>
+          <div style="font-size:12px;padding:4px;">15</div>
+          <div style="font-size:12px;padding:4px;">16</div>
+          <div style="font-size:12px;padding:4px;">17</div>
+          <div style="font-size:12px;padding:4px;">18</div>
+          <div style="font-size:12px;padding:4px;">19</div>
+          <div style="font-size:12px;padding:4px;">20</div>
+          <div style="font-size:12px;padding:4px;">21</div>
+          <div style="font-size:12px;padding:4px;">22</div>
+          <div style="font-size:12px;padding:4px;">23</div>
+          <div style="font-size:12px;padding:4px;">24</div>
+          <div style="font-size:12px;padding:4px;">25</div>
+          <div style="font-size:12px;padding:4px;">26</div>
+          <div style="font-size:12px;padding:4px;">27</div>
+          <div style="font-size:12px;padding:4px;">28</div>
+          <div style="font-size:12px;padding:4px;">29</div>
+          <div style="font-size:12px;padding:4px;">30</div>
+        </div>
+      </div>
+      <div style="flex:1;">
+        <div style="font-size:13px;font-weight:600;margin-bottom:8px;">Jul 2026</div>
+        <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;text-align:center;">
+          <div style="font-size:10px;color:var(--text-muted);">E</div>
+          <div style="font-size:10px;color:var(--text-muted);">T</div>
+          <div style="font-size:10px;color:var(--text-muted);">K</div>
+          <div style="font-size:10px;color:var(--text-muted);">N</div>
+          <div style="font-size:10px;color:var(--text-muted);">R</div>
+          <div style="font-size:10px;color:var(--text-muted);">L</div>
+          <div style="font-size:10px;color:var(--text-muted);">P</div>
+          <div style="font-size:12px;padding:4px;"></div>
+          <div style="font-size:12px;padding:4px;"></div>
+          <div style="font-size:12px;padding:4px;"></div>
+          <div style="font-size:12px;padding:4px;"></div>
+          <div style="font-size:12px;padding:4px;">1</div>
+          <div style="font-size:12px;padding:4px;">2</div>
+          <div style="font-size:12px;padding:4px;">3</div>
+          <div style="font-size:12px;padding:4px;">4</div>
+          <div style="font-size:12px;padding:4px;">5</div>
+          <div style="font-size:12px;padding:4px;">6</div>
+          <div style="font-size:12px;padding:4px;">7</div>
+          <div style="font-size:12px;padding:4px;background:var(--warning);color:#fff;border-radius:4px;">8</div>
+          <div style="font-size:12px;padding:4px;">9</div>
+          <div style="font-size:12px;padding:4px;">10</div>
+          <div style="font-size:12px;padding:4px;">11</div>
+          <div style="font-size:12px;padding:4px;">12</div>
+          <div style="font-size:12px;padding:4px;">13</div>
+          <div style="font-size:12px;padding:4px;">14</div>
+          <div style="font-size:12px;padding:4px;">15</div>
+          <div style="font-size:12px;padding:4px;">16</div>
+          <div style="font-size:12px;padding:4px;">17</div>
+          <div style="font-size:12px;padding:4px;">18</div>
+          <div style="font-size:12px;padding:4px;">19</div>
+          <div style="font-size:12px;padding:4px;">20</div>
+          <div style="font-size:12px;padding:4px;">21</div>
+          <div style="font-size:12px;padding:4px;">22</div>
+          <div style="font-size:12px;padding:4px;">23</div>
+          <div style="font-size:12px;padding:4px;">24</div>
+          <div style="font-size:12px;padding:4px;">25</div>
+          <div style="font-size:12px;padding:4px;">26</div>
+          <div style="font-size:12px;padding:4px;">27</div>
+          <div style="font-size:12px;padding:4px;">28</div>
+          <div style="font-size:12px;padding:4px;">29</div>
+          <div style="font-size:12px;padding:4px;">30</div>
+          <div style="font-size:12px;padding:4px;">31</div>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;gap:16px;margin-top:12px;align-items:center;">
+      <span style="display:flex;align-items:center;gap:6px;font-size:12px;"><span style="width:8px;height:8px;background:var(--success);border-radius:2px;display:inline-block;"></span> Charged</span>
+      <span style="display:flex;align-items:center;gap:6px;font-size:12px;"><span style="width:8px;height:8px;background:var(--warning);border-radius:2px;display:inline-block;"></span> Upcoming</span>
+    </div>
+  </div>
+
+  <!-- Danger Zone -->
+  <div class="danger-zone">
+    <div class="danger-title">Stop Tracking</div>
+    <div class="danger-text">This will stop notifications and remove from dashboard. You can re-add anytime.</div>
+    <button class="btn btn-outline-danger btn-sm" onclick="toggleSubscription()">Remove from SubSnoop</button>
+  </div>
+</div>
+
+<style>
+.badge-active {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  background: rgba(0,168,126,0.1);
+  color: var(--success);
+}
+</style>
+
+<script>
+function toggleSubscription() {
+  const btn = document.getElementById('toggleBtn');
+  if (btn.textContent === 'Cancel Track') {
+    btn.textContent = 'Resume Tracking';
+    btn.classList.remove('btn-outline-danger');
+    btn.classList.add('btn-outline');
+  } else {
+    btn.textContent = 'Cancel Track';
+    btn.classList.remove('btn-outline');
+    btn.classList.add('btn-outline-danger');
+  }
+}
+</script>
+</body>
+</html>

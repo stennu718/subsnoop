@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SubSnoop — Settings</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #ffffff;
+  --surface: #f4f4f4;
+  --surface-2: #fafafa;
+  --text-primary: #191c1f;
+  --text-secondary: #505a63;
+  --text-muted: #8d969e;
+  --accent: #494fdf;
+  --accent-hover: #3d44d0;
+  --success: #00a87e;
+  --warning: #ec7e00;
+  --danger: #e23b4a;
+  --border: #e8e8ea;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-pill: 9999px;
+  --nav-height: 64px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', system-ui, sans-serif; color: var(--text-primary); background: var(--bg); line-height: 1.5; -webkit-font-smoothing: antialiased; }
+
+.nav { height: var(--nav-height); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 32px; position: sticky; top: 0; background: rgba(255,255,255,0.92); backdrop-filter: blur(12px); z-index: 100; }
+.nav-logo { font-size: 20px; font-weight: 700; letter-spacing: -0.4px; display: flex; align-items: center; gap: 8px; }
+.nav-logo-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+.nav-links { display: flex; gap: 32px; margin-left: 48px; }
+.nav-links a { font-size: 14px; font-weight: 500; color: var(--text-secondary); text-decoration: none; transition: color 0.15s; }
+.nav-links a:hover, .nav-links a.active { color: var(--text-primary); }
+.nav-right { margin-left: auto; display: flex; align-items: center; gap: 16px; }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 20px; border-radius: var(--radius-pill); font-family: inherit; font-size: 14px; font-weight: 500; cursor: pointer; border: none; transition: opacity 0.15s, transform 0.1s; text-decoration: none; }
+.btn:active { transform: scale(0.97); }
+.btn-primary { background: var(--text-primary); color: #fff; }
+.btn-primary:hover { opacity: 0.85; }
+.btn-danger { background: var(--danger); color: #fff; }
+.btn-outline { background: transparent; color: var(--text-primary); border: 2px solid var(--text-primary); }
+.btn-outline-danger { background: transparent; color: var(--danger); border: 2px solid var(--danger); }
+.btn-ghost { background: transparent; color: var(--text-secondary); padding: 10px 16px; }
+.btn-ghost:hover { color: var(--text-primary); }
+.btn-sm { padding: 6px 14px; font-size: 13px; }
+.btn-lg { padding: 14px 32px; font-size: 16px; }
+
+.settings-container { max-width: 720px; margin: 0 auto; padding: 40px 32px; }
+
+.page-title { font-size: 32px; font-weight: 600; letter-spacing: -0.64px; line-height: 1.1; margin-bottom: 8px; }
+.page-subtitle { font-size: 16px; color: var(--text-secondary); margin-bottom: 40px; }
+
+.section { margin-bottom: 40px; }
+
+.section-title { font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px; color: var(--text-muted); margin-bottom: 16px; }
+
+.card { border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 16px; }
+
+.setting-row { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; border-bottom: 1px solid var(--border); }
+.setting-row:last-child { border-bottom: none; }
+
+.setting-info { flex: 1; }
+.setting-name { font-size: 15px; font-weight: 500; letter-spacing: -0.15px; }
+.setting-desc { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+
+/* Toggle Switch */
+.toggle { position: relative; display: inline-block; width: 48px; height: 26px; flex-shrink: 0; }
+.toggle input { opacity: 0; width: 0; height: 0; }
+.toggle-slider { position: absolute; cursor: pointer; inset: 0; background: var(--border); border-radius: 26px; transition: 0.2s; }
+.toggle-slider::before { content: ''; position: absolute; height: 20px; width: 20px; left: 3px; bottom: 3px; background: #fff; border-radius: 50%; transition: 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.15); }
+.toggle input:checked + .toggle-slider { background: var(--accent); }
+.toggle input:checked + .toggle-slider::before { transform: translateX(22px); }
+
+/* Select */
+.select { padding: 8px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-family: inherit; font-size: 14px; color: var(--text-primary); background: #fff; cursor: pointer; min-width: 140px; }
+
+/* Connected Banks */
+.bank-row { display: flex; align-items: center; gap: 14px; }
+.bank-logo { width: 36px; height: 36px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: #fff; flex-shrink: 0; }
+.bank-status { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+.bank-status-badge { display: flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 500; }
+.bank-status-badge.connected { background: rgba(0,168,126,0.1); color: var(--success); }
+.bank-status-badge .width: 6px; height: 6px; border-radius: 50%; background: current color; }
+
+/* Subscription List Compact */
+.sub-compact-row { display: flex; align-items: center; padding: 14px 24px; border-bottom: 1px solid var(--border); gap: 12px; }
+.sub-compact-row:last-child { border-bottom: none; }
+.sub-compact-icon { width: 32px; height: 32px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #fff; flex-shrink: 0; }
+.sub-compact-name { flex: 1; font-size: 14px; font-weight: 500; }
+.sub-compact-amount { font-size: 14px; font-weight: 600; }
+
+@media (max-width: 640px) {
+  .settings-container { padding: 24px 16px; }
+  .nav-links { display: none; }
+  .page-title { font-size: 24px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-logo">
+    <div class="nav-logo-dot"></div>
+    SubSnoop
+  </div>
+  <div class="nav-links">
+    <a href="dashboard.html">Dashboard</a>
+    <a href="scan.html">Scan</a>
+    <a href="subscriptions.html">Subscriptions</a>
+    <a href="#" class="active">Settings</a>
+  </div>
+  <div class="nav-right">
+    <button class="btn btn-ghost btn-sm">Sign Out</button>
+  </div>
+</nav>
+
+<div class="settings-container">
+  <h1 class="page-title">Settings</h1>
+  <p class="page-subtitle">Manage your subscription tracking preferences</p>
+
+  <!-- Connected Accounts -->
+  <div class="section">
+    <div class="section-title">Connected Accounts</div>
+    <div class="card">
+      <div class="setting-row">
+        <div class="bank-row">
+          <div class="bank-logo" style="background:#0033A0;">L</div>
+          <div class="setting-info">
+            <div class="setting-name">LHV</div>
+            <div class="setting-desc">Connected via Open Banking · 3 accounts</div>
+          </div>
+        </div>
+        <div class="bank-status">
+          <div class="bank-status-badge connected"><div class="dot"></div> Connected</div>
+          <button class="btn btn-ghost btn-sm">Disconnect</button>
+        </div>
+      </div>
+      <div class="setting-row">
+        <div class="bank-row">
+          <div class="bank-logo" style="background:#00A651;">S</div>
+          <div class="setting-info">
+            <div class="setting-name">Swedbank</div>
+            <div class="setting-desc">Connected via Open Banking · 2 accounts</div>
+          </div>
+        </div>
+        <div class="bank-status">
+          <div class="bank-status-badge connected"><div class="dot"></div> Connected</div>
+          <button class="btn btn-ghost btn-sm">Disconnect</button>
+        </div>
+      </div>
+      <div class="setting-row">
+        <div class="bank-row">
+          <div class="bank-logo" style="background:#6B7280;">+</div>
+          <div class="setting-info">
+            <div class="setting-name">Add New Bank</div>
+            <div class="setting-desc">Connect via Open Banking or upload CSV</div>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-sm">Connect</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notifications -->
+  <div class="section">
+    <div class="section-title">Notifications</div>
+    <div class="card">
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-name">Renewal Alerts</div>
+          <div class="setting-desc">Get notified 3 days before subscription renews</div>
+        </div>
+        <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+      </div>
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-name">Price Increase Alerts</div>
+          <div class="setting-desc">Notify when a subscription amount changes</div>
+        </div>
+        <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+      </div>
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-name">Weekly Summary</div>
+          <div class="setting-desc">Receive weekly email with subscription overview</div>
+        </div>
+        <label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label>
+      </div>
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-name">New Subscription Detection</div>
+          <div class="setting-desc">Auto-detect new subscriptions on bank sync</div>
+        </div>
+        <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detection Settings -->
+  <div class="section">
+    <div class="section-title">Detection Preferences</div>
+    <div class="card">
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-name">Detection Sensitivity</div>
+          <div class="setting-desc">How aggressively we detect subscriptions</div>
+        </div>
+        <select class="select">
+          <option>High (detect everything)</option>
+          <option selected>Normal</option>
+          <option>Conservative</option>
+        </select>
+      </div>
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-name">Minimum Amount</div>
+          <div class="setting-desc">Ignore charges below this amount</div>
+        </div>
+        <select class="select">
+          <option>€0.00</option>
+          <option>€1.00</option>
+          <option selected>€2.99</option>
+          <option>€5.00</option>
+          <option>€10.00</option>
+        </select>
+      </div>
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-name">Scan Frequency</div>
+          <div class="setting-desc">How often we check for new transactions</div>
+        </div>
+        <select class="select">
+          <option>Daily</option>
+          <option selected>Every 6 hours</option>
+          <option>Manual only</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Data Management -->
+  <div class="section">
+    <div class="section-title">Data Management</div>
+    <div class="card">
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-name">Export All Data</div>
+          <div class="setting-desc">Download all subscription data as CSV</div>
+        </div>
+        <button class="btn btn-outline btn-sm">Export CSV</button>
+      </div>
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-name">Purge Transaction Cache</div>
+          <div class="setting-desc">Remove cached bank data (keeps subscriptions)</div>
+        </div>
+        <button class="btn btn-outline btn-sm">Purge Cache</button>
+      </div>
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-name">Delete All Data</div>
+          <div class="setting-desc">Permanently delete all tracked subscriptions</div>
+        </div>
+        <button class="btn btn-outline-danger btn-sm">Delete All</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Referral -->
+  <div class="section">
+    <div class="section-title">Referral Program</div>
+    <div class="card" style="background:var(--text-primary);color:#fff;border:none;">
+      <div style="padding:24px;align-items:flex-start;">
+        <div style="font-size:24px;font-weight:700;letter-spacing:-0.48px;margin-bottom:8px;">Give €5, Get €5</div>
+        <div style="font-size:14px;opacity:0.8;margin-bottom:20px;line-height:1.6;">Share SubSnoop with friends. They get €5 credit, you get €5 when they connect their first bank.</div>
+        <div style="display:flex;gap:12px;align-items:center;">
+          <input type="text" value="https://subsnoop.app/r/STEN718" readonly style="flex:1;padding:10px 16px;border-radius:var(--radius-pill);border:none;font-size:13px;font-family:ui-monospace,monospace;background:rgba(255,255,255,0.12);color:#fff;">
+          <button class="btn btn-secondary btn-sm">Copy Link</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Plan -->
+  <div class="section">
+    <div class="section-title">Current Plan</div>
+    <div class="card">
+      <div class="setting-row">
+        <div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+            <span style="font-size:16px;font-weight:600;">Free Plan</span>
+            <span style="padding:2px 8px;border-radius:var(--radius-pill);background:var(--surface);font-size:11px;font-weight:600;text-transform:uppercase;">Current</span>
+          </div>
+          <div class="setting-desc">Up to 5 subscriptions · CSV import only · Basic detection</div>
+        </div>
+        <button class="btn btn-primary btn-sm">Upgrade</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.querySelectorAll('.toggle input').forEach(toggle => {
+  toggle.addEventListener('change', (e) => {
+    const row = e.target.closest('.setting-row');
+    if (e.target.checked) {
+      row.style.background = 'rgba(73,79,223,0.02)';
+    } else {
+      row.style.background = '';
+    }
+    setTimeout(() => row.style.background = '', 300);
+  });
+});
+</script>
+</body>
+</html>
