@@ -19,6 +19,7 @@ class UserResponse(UserBase):
     model_config = ConfigDict(from_attributes=True)
 
     id: int
+    plan: str = "free"
     is_active: bool
     created_at: datetime
 
@@ -106,15 +107,19 @@ class CSVParseResponse(BaseModel):
 
 
 # --- Auth schemas ---
-class TokenRequest(BaseModel):
+class UserLogin(BaseModel):
     email: EmailStr
     password: str
 
 
-class TokenResponse(BaseModel):
+class Token(BaseModel):
     access_token: str
+    refresh_token: str
     token_type: str = "bearer"
-    expires_in: int
+
+
+class TokenRefresh(BaseModel):
+    refresh_token: str
 
 
 # --- Category Override ---

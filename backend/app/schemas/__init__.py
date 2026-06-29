@@ -9,9 +9,10 @@ from app.schemas.schemas import (
     ParsedTransaction,
     ScanResultResponse,
     SubscriptionResponse,
-    TokenRequest,
-    TokenResponse,
+    Token,
+    TokenRefresh,
     UserCreate,
+    UserLogin,
     UserResponse,
 )
 
@@ -25,8 +26,9 @@ __all__ = [
     "ParsedTransaction",
     "ScanResultResponse",
     "SubscriptionResponse",
-    "TokenRequest",
-    "TokenResponse",
+    "Token",
+    "TokenRefresh",
     "UserCreate",
+    "UserLogin",
     "UserResponse",
 ]

@@ -4,14 +4,9 @@ import io
 import pytest
 from fastapi.testclient import TestClient
 
-from app.main import app
-
-
-client = TestClient(app)
-
 
 class TestHealthEndpoint:
-    def test_health_returns_ok(self):
+    def test_health_returns_ok(self, client: TestClient):
         response = client.get("/health")
         assert response.status_code == 200
         data = response.json()
@@ -21,7 +16,7 @@ class TestHealthEndpoint:
 
 
 class TestScanUpload:
-    def test_upload_swedbank_csv(self):
+    def test_upload_swedbank_csv(self, client: TestClient):
         csv_content = (
             "Kuupäev;Kirjeldus;Summa;Valuuta;Laekumine/Makse\n"
             "01.01.2024;NETFLIX.COM;-9.99;EUR;Makse\n"
@@ -39,7 +34,7 @@ class TestScanUpload:
         assert data["total_transactions"] == 4
         assert len(data["detected_subscriptions"]) >= 1
 
-    def test_upload_seb_csv(self):
+    def test_upload_seb_csv(self, client: TestClient):
         csv_content = (
             "Date,Description,Amount,Type,Balance\n"
             "2024-01-05,Spotify AB,-11.99,Debit,1200.00\n"
@@ -59,9 +54,14 @@ class TestScanUpload:
 
 
 class TestAuth:
-    def test_login_returns_token(self):
+    def test_login_returns_token(self, client: TestClient):
+        # Register first
+        client.post(
+            "/api/v1/auth/register",
+            json={"email": "test@subsnoop.ee", "password": "testpassword123"},
+        )
         response = client.post(
-            "/api/v1/auth/token",
+            "/api/v1/auth/login",
             json={"email": "test@subsnoop.ee", "password": "testpassword123"},
         )
         assert response.status_code == 200
@@ -69,9 +69,9 @@ class TestAuth:
         assert "access_token" in data
         assert data["token_type"] == "bearer"
 
-    def test_login_missing_fields(self):
+    def test_login_missing_fields(self, client: TestClient):
         response = client.post(
-            "/api/v1/auth/token",
+            "/api/v1/auth/login",
             json={"email": "", "password": ""},
         )
         assert response.status_code == 422  # validation error
